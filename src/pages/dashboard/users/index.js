@@ -54,8 +54,6 @@ function ListUsers() {
 
         const { records, totalPages } = usersBD.data;
 
-        console.log('usersBD', usersBD);
-
         if (records && records.length > 0) {
           setUsers(
             records.map((user, index) => {
@@ -118,25 +116,6 @@ function ListUsers() {
       //toast.error(message);
       setSavingRecord(false);
     }
-    // .then((response) => {
-    //   //IF RESPONSE STATUS IS NOT 200 THEN THROW ERROR
-    //   if (response.status !== 200) {
-    //     toast.error('No se pudo enviar la información');
-    //     setSavingRecord(false);
-    //   }
-    //   return response.json();
-    // })
-    // .then((data) => {
-    //   toast.success('Registro Guardado con éxito');
-    //   setShowModalRecordDetail(0);
-    //   setRefreshTable((currCount) => currCount + 1);
-    //   setSavingRecord(false);
-    // })
-    // .catch((error) => {
-    //   //console.error('Error:', error);
-    //   toast.error('El registro no se pudo guardar');
-    //   setSavingRecord(false);
-    // });
   };
 
   const renderCell = React.useCallback((record, columnKey) => {
@@ -305,30 +284,6 @@ function ListUsers() {
                     { value: 'regular', label: 'Regular' },
                     { value: 'admin', label: 'Administrador' },
                   ],
-                },
-                {
-                  key: 'contact_name',
-                  label: 'Nombre de Contácto',
-                  isRequired: true,
-                  type: 'text',
-                },
-                {
-                  key: 'contact_phone',
-                  label: 'Teléfono de Contácto',
-                  isRequired: true,
-                  type: 'text',
-                },
-                {
-                  key: 'address',
-                  label: 'Dirección',
-                  type: 'text',
-                  isRequired: true,
-                },
-                {
-                  key: 'invoice_to',
-                  label: 'Facturar a nombre de',
-                  type: 'text',
-                  isRequired: true,
                 },
               ],
             }}

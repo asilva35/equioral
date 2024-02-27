@@ -4,7 +4,7 @@ import { getToken } from 'next-auth/jwt';
 import { sanitizeOBJ } from '@/utils/utils';
 
 async function updateRecord(userid, record) {
-  const url = `${process.env.VIDASHY_URL}6d498a2a94a3/quoter/users`;
+  const url = `${process.env.VIDASHY_URL}${process.env.VIDASHY_ORGANIZATION}/${process.env.VIDASHY_DATABASE}/users`;
 
   try {
     const record_update = sanitizeOBJ({
@@ -68,18 +68,6 @@ export default async function handler(req, res) {
     }
     if (!record.role || record.role === '') {
       validation.role = 'Field Required';
-    }
-    if (!record.address || record.address === '') {
-      validation.address = 'Field Required';
-    }
-    if (!record.invoice_to || record.invoice_to === '') {
-      validation.invoice_to = 'Field Required';
-    }
-    if (!record.contact_name || record.contact_name === '') {
-      validation.contact_name = 'Field Required';
-    }
-    if (!record.contact_phone || record.contact_phone === '') {
-      validation.contact_phone = 'Field Required';
     }
 
     //EVALUATE IF VALIDATION IS NOT EMPTY

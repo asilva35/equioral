@@ -17,7 +17,8 @@ export default function TableComponent(props) {
   const { data } = props;
   const router = useRouter();
   const renderCell = React.useCallback((record, columnKey) => {
-    if (data.renderCell) return data.renderCell(record, columnKey);
+    if (data.renderCell)
+      return data.renderCell(record, columnKey, data.showRecordDetail);
 
     const cellValue = record[columnKey];
     return cellValue;

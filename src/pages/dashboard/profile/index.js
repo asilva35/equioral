@@ -82,28 +82,6 @@ function DashBoardScreen() {
       setSavingRecord(false);
       setRecordChange(false);
     }
-    // .then((response) => {
-    //   //IF RESPONSE STATUS IS NOT 200 THEN THROW ERROR
-    //   if (response.status !== 200) {
-    //     toast.error('No se pudo enviar la información');
-    //     setSavingRecord(false);
-    //     setRecordChange(false);
-    //   }
-    //   return response.json();
-    // })
-    // .then((data) => {
-    //   toast.success('Registro Guardado con éxito');
-    //   setShowModalRecordDetail(0);
-    //   setRefreshTable((currCount) => currCount + 1);
-    //   setSavingRecord(false);
-    //   setRecordChange(false);
-    // })
-    // .catch((error) => {
-    //   //console.error('Error:', error);
-    //   toast.error('El registro no se pudo guardar');
-    //   setSavingRecord(false);
-    //   setRecordChange(false);
-    // });
   };
 
   return (
@@ -145,30 +123,6 @@ function DashBoardScreen() {
               },
               { key: 'email', label: 'Email', type: 'text', isRequerid: true },
               { key: 'password', label: 'Password', type: 'password' },
-              {
-                key: 'contact_name',
-                label: 'Nombre de Contácto',
-                type: 'text',
-                isRequerid: true,
-              },
-              {
-                key: 'contact_phone',
-                label: 'Teléfono de Contácto',
-                type: 'text',
-                isRequerid: true,
-              },
-              {
-                key: 'address',
-                label: 'Dirección',
-                type: 'text',
-                isRequerid: true,
-              },
-              {
-                key: 'invoice_to',
-                label: 'Facturar a nombre de',
-                type: 'text',
-                isRequerid: true,
-              },
             ],
           }}
         />

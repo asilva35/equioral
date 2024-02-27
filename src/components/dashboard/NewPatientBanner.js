@@ -8,7 +8,7 @@ export default function MyComponent(props) {
       <div className="div">
         <div className="div-2">
           <Link
-            href="/dashboard/orders/new"
+            href="/dashboard/patients/new"
             style={{
               alignItems: 'center',
               borderRadius: '5px',
@@ -25,12 +25,10 @@ export default function MyComponent(props) {
               height={24}
               alt=""
             />
-            <div className="div-3">Nueva Cotización</div>
+            <div className="div-3">Nuevo Paciente</div>
           </Link>
         </div>
-        <div className="div-4">
-          Elija entre nuestra gran variedad de productos para protejer sus datos
-        </div>
+        <div className="div-4">Crear un paciente nuevo</div>
       </div>
       <style jsx>{`
         .div {

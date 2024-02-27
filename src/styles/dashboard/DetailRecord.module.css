@@ -1,0 +1,45 @@
+.FieldImage{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap:10px;
+}
+
+.ImagePreview{
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    border: solid #ccc 1px;
+    margin: 10px 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ImagePreview.multiple{
+    width: 200px;
+    min-height: 100px;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 10px;
+    gap:2px;
+    justify-content: flex-start;
+}
+
+.ImagePreview img{
+    height: 80px;
+    width: auto;
+}
+
+.ImagePreview.multiple img{
+    width: 88px;
+    height: auto;
+}
+
+.ChangeImage{
+    font-size: 0.7em;
+    color: blue;
+    cursor: pointer;
+}

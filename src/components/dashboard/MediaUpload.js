@@ -19,7 +19,7 @@ export default function MediaUpload(props) {
           className="inputfile"
         />
 
-        <label ref={label} for="file" className="label">
+        <label ref={label} htmlFor="file" className="label">
           <Image
             src="/assets/images/theme-light/upload-icon.svg"
             width={24}

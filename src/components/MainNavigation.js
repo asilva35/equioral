@@ -41,11 +41,8 @@ export default function MainNavigation() {
 
   const onSelectOption = (option) => {
     setSelectedOption(option);
-    if (option.has('new-order')) return onClickMenu('/dashboard/orders/new');
-    if (option.has('list-orders')) return onClickMenu('/dashboard/orders');
-    if (option.has('list-products')) return onClickMenu('/dashboard/products');
-    if (option.has('list-addons'))
-      return onClickMenu('/dashboard/products/addons');
+    if (option.has('new-patient'))
+      return onClickMenu('/dashboard/patients/new');
   };
 
   return (
@@ -66,100 +63,25 @@ export default function MainNavigation() {
       >
         Inicio
       </Button>
-      <ButtonGroup variant="flat">
+      {user && user?.role === 'admin' && (
         <Button
           color="default"
           variant="light"
           className="btn-menu"
-          onClick={() => onClickMenu('/dashboard/orders')}
+          onClick={() => onClickMenu('/dashboard/patients')}
           startContent={
             <Image
-              src={`/assets/images/theme-light/icon-orders.svg`}
+              src={`/assets/images/theme-light/icon-patients.svg`}
               width={24}
               height={24}
-              alt="Cotizaciones"
+              alt="Patients"
             />
           }
         >
-          Cotizaciones
+          Pacientes
         </Button>
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
-            <Button isIconOnly variant="light">
-              <ChevronDownIcon />
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            disallowEmptySelection
-            aria-label="Opciones de Cotizaciones"
-            selectedKeys={selectedOption}
-            selectionMode="single"
-            onSelectionChange={onSelectOption}
-            className="max-w-[300px]"
-          >
-            <DropdownItem
-              key="new-order"
-              description={`Crear nueva Cotización`}
-            >
-              Nueva
-            </DropdownItem>
-            <DropdownItem
-              key="list-orders"
-              description={`Ver mis Cotizaciones`}
-            >
-              Todas
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </ButtonGroup>
-      {user && user?.role === 'admin' && (
-        <ButtonGroup variant="flat">
-          <Button
-            color="default"
-            variant="light"
-            className="btn-menu"
-            onClick={() => onClickMenu('/dashboard/products')}
-            startContent={
-              <Image
-                src={`/assets/images/theme-light/icon-products.svg`}
-                width={24}
-                height={24}
-                alt="Inventario"
-              />
-            }
-          >
-            Inventario
-          </Button>
-          <Dropdown placement="bottom-end">
-            <DropdownTrigger>
-              <Button isIconOnly variant="light">
-                <ChevronDownIcon />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              disallowEmptySelection
-              aria-label="Opciones de Inventario"
-              selectedKeys={selectedOption}
-              selectionMode="single"
-              onSelectionChange={onSelectOption}
-              className="max-w-[300px]"
-            >
-              <DropdownItem
-                key="list-products"
-                description={`Listado de Productos`}
-              >
-                Productos
-              </DropdownItem>
-              <DropdownItem
-                key="list-addons"
-                description={`Listado de Adicionales`}
-              >
-                Adicionales
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </ButtonGroup>
       )}
+
       {user && user?.role === 'admin' && (
         <Button
           color="default"
@@ -178,22 +100,6 @@ export default function MainNavigation() {
           Usuarios
         </Button>
       )}
-      <Button
-        color="default"
-        variant="light"
-        className="btn-menu"
-        onClick={() => onClickMenu('/dashboard/tickets')}
-        startContent={
-          <Image
-            src={`/assets/images/theme-light/icon-tickets.svg`}
-            width={24}
-            height={24}
-            alt="Tickets"
-          />
-        }
-      >
-        Tickets
-      </Button>
       <Button
         color="default"
         variant="light"

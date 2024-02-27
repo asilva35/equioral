@@ -39,10 +39,11 @@ export default function ToBar(props) {
       <NavbarBrand>
         <Link href="/">
           <Image
-            src={`/assets/images/theme-light/logo.svg`}
-            width={141}
-            height={33}
+            src={`/assets/images/theme-light/logo.png`}
+            width={176}
+            height={89}
             alt="Logo"
+            className={`${styles.Logo}`}
           />
         </Link>
       </NavbarBrand>
@@ -69,9 +70,11 @@ export default function ToBar(props) {
             <DropdownItem key="profile">
               <Link href="/dashboard/profile">Perfil</Link>
             </DropdownItem>
-            <DropdownItem key="orders">
-              <Link href="/dashboard/orders">Mis Cotizaciones</Link>
-            </DropdownItem>
+            {user && user?.role === 'admin' && (
+              <DropdownItem key="patients">
+                <Link href="/dashboard/patients">Mis Pacientes</Link>
+              </DropdownItem>
+            )}
             <DropdownItem key="logout" color="danger">
               <Link href="/close-session">Cerrar Sesión</Link>
             </DropdownItem>

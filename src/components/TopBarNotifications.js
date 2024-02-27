@@ -27,34 +27,34 @@ export default function TopBarNotifications(props) {
   const [refreshNotifications, setRefreshNotifications] = React.useState(0);
   const [numberNotifications, setNumberNotifications] = React.useState(0);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const fetchRecords = async () => {
-        const recordsBD = await getNotifications(user.role);
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const fetchRecords = async () => {
+  //       const recordsBD = await getNotifications(user.role);
 
-        if (!recordsBD.data || !recordsBD.data.total) return;
+  //       if (!recordsBD.data || !recordsBD.data.total) return;
 
-        const { total } = recordsBD.data;
+  //       const { total } = recordsBD.data;
 
-        if (total > 0) {
-          setNumberNotifications(total);
-          setIsBadgeVisible(true);
-          if (total > 1)
-            setDefaultMessage(`Tienes ${total} notificaciones nuevas`);
-          if (total == 1) setDefaultMessage(`Tienes una nueva notificación`);
-        }
-      };
-      fetchRecords();
-    }
-  }, [refreshNotifications]);
+  //       if (total > 0) {
+  //         setNumberNotifications(total);
+  //         setIsBadgeVisible(true);
+  //         if (total > 1)
+  //           setDefaultMessage(`Tienes ${total} notificaciones nuevas`);
+  //         if (total == 1) setDefaultMessage(`Tienes una nueva notificación`);
+  //       }
+  //     };
+  //     fetchRecords();
+  //   }
+  // }, [refreshNotifications]);
 
   //REFRESH NOTIFICATIONS EVERY 60 SECONDS
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRefreshNotifications((counter) => counter + 1);
-    }, 60000);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setRefreshNotifications((counter) => counter + 1);
+  //   }, 60000);
+  //   return () => clearInterval(interval);
+  // }, []);
   return (
     <>
       <Dropdown placement="bottom-end">

@@ -16,26 +16,18 @@ function generateUUID() {
   return uuid;
 }
 
-async function createRecord(userid, record) {
-  const url = `${process.env.VIDASHY_URL}${process.env.VIDASHY_ORGANIZATION}/${process.env.VIDASHY_DATABASE}/users`;
+async function createRecord(record) {
+  const url = `${process.env.VIDASHY_URL}${process.env.VIDASHY_ORGANIZATION}/${process.env.VIDASHY_DATABASE}/patients`;
   try {
     const new_record = sanitizeOBJ({
       id: generateUUID(),
-      name: record.name,
-      username: record.username,
-      email: record.email,
-      role: record.role,
-      address: record.address,
-      invoice_to: record.invoice_to,
-      contact_name: record.contact_name,
-      contact_phone: record.contact_phone,
+      horse: record.horse,
+      horse_farm: record.horse_farm,
+      owner_name: record.owner_name,
+      owner_phone: record.owner_phone,
+      status: record.status,
     });
 
-    if (record.password) {
-      const salt = `$2a$10$${process.env.BCRIPT_SALT}`;
-      const hash = bcryptjs.hashSync(record.password, salt);
-      new_record.password = hash;
-    }
     const response = await axios({
       method: 'post',
       url,
@@ -63,24 +55,24 @@ export default async function handler(req, res) {
       return res.status(401).send({ message: 'Not authorized' });
     }
 
-    const { record } = req.body;
+    const { record_request } = req.body;
 
     const validation = {};
 
-    if (!record.name || record.name === '') {
-      validation.name = 'Field Required';
+    if (!record_request.horse || record_request.horse === '') {
+      validation.horse = 'Field Required';
     }
-    if (!record.username || record.username === '') {
-      validation.username = 'Field Required';
+    if (!record_request.horse_farm || record_request.horse_farm === '') {
+      validation.horse_farm = 'Field Required';
     }
-    if (!record.email || record.email === '') {
-      validation.email = 'Field Required';
+    if (!record_request.owner_name || record_request.owner_name === '') {
+      validation.owner_name = 'Field Required';
     }
-    if (!record.role || record.role === '') {
-      validation.role = 'Field Required';
+    if (!record_request.owner_phone || record_request.owner_phone === '') {
+      validation.owner_phone = 'Field Required';
     }
-    if (!record.password || record.password === '') {
-      validation.password = 'Field Required';
+    if (!record_request.status || record_request.status === '') {
+      validation.status = 'Field Required';
     }
 
     //EVALUATE IF VALIDATION IS NOT EMPTY
@@ -91,7 +83,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const response = await createRecord(userid, record);
+    const response = await createRecord(record_request);
 
     if (!response)
       return res
