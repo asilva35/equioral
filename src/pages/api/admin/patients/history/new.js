@@ -2,6 +2,7 @@ import axios from 'axios';
 import { getRecords } from '@/vidashy-sdk/dist/backend';
 import { getToken } from 'next-auth/jwt';
 import { sanitizeOBJ } from '@/utils/utils';
+import { sortBy, sortValue } from '@/utils/sorts';
 
 function generateUUID() {
   let d = new Date().getTime();
@@ -23,7 +24,10 @@ async function listRecords() {
     database: process.env.VIDASHY_DATABASE,
     object: 'histories',
     api_key: process.env.VIDASHY_API_KEY,
-    params: {},
+    params: {
+      sortBy: sortBy({ createdAt: -1 }),
+      sortValue: sortValue({ createdAt: -1 }),
+    },
   });
 }
 
@@ -33,14 +37,18 @@ async function createRecord(record) {
 
   if (!recordsDB) return null;
 
-  if (recordsDB.total > 0) {
-    new_id = recordsDB.total + 1;
+  if (recordsDB && recordsDB.records && recordsDB.records.length > 0) {
+    new_id = Number.parseInt(recordsDB.records[0].id) + 1;
+  } else {
+    return null;
   }
+
+  if (typeof new_id !== 'number') return null;
 
   const url = `${process.env.VIDASHY_URL}${process.env.VIDASHY_ORGANIZATION}/${process.env.VIDASHY_DATABASE}/histories`;
   try {
     const new_record = sanitizeOBJ({
-      id: new_id,
+      id: new_id.toString(),
       patient_id: record.patient_id,
       first_observation: record.first_observation,
     });
