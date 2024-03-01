@@ -50,6 +50,8 @@ function capitalizeFirstLetter(string) {
 
 //FUNCTION FOR SHORT UUID
 function shortUUID(uuid) {
+  if (!uuid) return uuid;
+  if (!uuid.length < 10) return uuid;
   return `${uuid.substring(0, 5)}...${uuid.substring(uuid.length - 5)}`;
 }
 

@@ -23,6 +23,7 @@ export default function App(props) {
     children,
     onCloseModal,
     savingRecord,
+    labelButtonSave,
   } = props;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -73,7 +74,7 @@ export default function App(props) {
                       disabled={!allowSave}
                       isLoading={savingRecord}
                     >
-                      Save
+                      {labelButtonSave || 'Save'}
                     </Button>
                   )}
                 </ModalFooter>

@@ -18,4 +18,12 @@ const filterValue = (object) => {
   return filter.join(',');
 };
 
-export { filterBy, filterValue };
+const filterComparison = (object) => {
+  const filter = [];
+  Object.keys(object).forEach((key) => {
+    if (object[key]) filter.push(object[key]);
+  });
+  return filter.join(',');
+};
+
+export { filterBy, filterValue, filterComparison };

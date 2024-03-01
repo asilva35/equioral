@@ -1,5 +1,5 @@
 import axios from 'axios';
-import bcryptjs from 'bcryptjs';
+import { getRecords } from '@/vidashy-sdk/dist/backend';
 import { getToken } from 'next-auth/jwt';
 import { sanitizeOBJ } from '@/utils/utils';
 
@@ -16,11 +16,31 @@ function generateUUID() {
   return uuid;
 }
 
+async function listRecords() {
+  return await getRecords({
+    backend_url: process.env.VIDASHY_URL,
+    organization: process.env.VIDASHY_ORGANIZATION,
+    database: process.env.VIDASHY_DATABASE,
+    object: 'histories',
+    api_key: process.env.VIDASHY_API_KEY,
+    params: {},
+  });
+}
+
 async function createRecord(record) {
+  let new_id = 1;
+  let recordsDB = await listRecords();
+
+  if (!recordsDB) return null;
+
+  if (recordsDB.total > 0) {
+    new_id = recordsDB.total + 1;
+  }
+
   const url = `${process.env.VIDASHY_URL}${process.env.VIDASHY_ORGANIZATION}/${process.env.VIDASHY_DATABASE}/histories`;
   try {
     const new_record = sanitizeOBJ({
-      id: generateUUID(),
+      id: new_id,
       patient_id: record.patient_id,
       first_observation: record.first_observation,
     });

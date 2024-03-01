@@ -288,7 +288,7 @@ function ListHistory() {
             renderCell,
           }}
           modalComponentData={{
-            title: 'Detalle de Paciente',
+            title: 'Detalle de Historia',
           }}
           schema={{
             fields: [
