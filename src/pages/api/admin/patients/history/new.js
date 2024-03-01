@@ -35,12 +35,12 @@ async function createRecord(record) {
   let new_id = 1;
   let recordsDB = await listRecords();
 
-  if (!recordsDB) return null;
+  if (!recordsDB) return null; //IMPORTANT: IF DB NOT RESPOND RETURN NULL
 
-  if (recordsDB && recordsDB.records && recordsDB.records.length > 0) {
+  //IF RECORDS EXIST, GET THE LAST ID AND ADD 1
+  //IF NOT MEANS COLLECTION IS EMPTY, THEN NEW ID IS 1
+  if (recordsDB.records && recordsDB.records.length > 0) {
     new_id = Number.parseInt(recordsDB.records[0].id) + 1;
-  } else {
-    return null;
   }
 
   if (typeof new_id !== 'number') return null;
