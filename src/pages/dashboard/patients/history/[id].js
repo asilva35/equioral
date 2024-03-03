@@ -287,6 +287,7 @@ function ListHistory() {
             ],
             renderCell,
           }}
+          showSearch={true}
           modalComponentData={{
             title: 'Detalle de Historia',
           }}

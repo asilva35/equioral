@@ -133,6 +133,7 @@ function ListPatients() {
             ],
             renderCell,
           }}
+          showSearch={true}
           modalComponentData={{
             title: 'Detalle de Paciente',
           }}

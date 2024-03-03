@@ -24,6 +24,14 @@ async function updateRecord(record) {
       first_observation: record.first_observation,
       treatment: record.treatment,
       photos: record.photos,
+      share_id: record.share_id,
+      share_options: {
+        share_time: record.share_options.share_time,
+        share_expiration: record.share_options.share_expiration,
+        share_password: record.share_options.share_password,
+        share_enabled: record.share_options.share_enabled,
+        share_url: record.share_options.share_url,
+      },
     });
 
     const response = await axios({

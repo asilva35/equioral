@@ -26,6 +26,18 @@
     align-items: center;
 }
 
+.TopNav{
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: auto;
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 .MainButton{
     font-weight: 600;
     color: #fff;
@@ -173,8 +185,10 @@
 
 .PdfTarget{
     width: 100%;
-    min-width: 900px;
-    padding: 20px 50px;
+    min-width: 800px;
+    padding: 60px 50px;
+    max-width: 900px;
+    margin: auto;
 }
 
 .PdfHeader{
@@ -186,6 +200,7 @@
 .PdfLeftHeader{
     width: 50%;
     display: flex;
+    padding-top: 20px;
 }
 
 .PdfHeaderInfo{
@@ -272,4 +287,15 @@
 .smallText{
     font-size: 12px;
     color: #52525b;
+}
+
+.TextCnt{
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.NoData{
+    width: 100%;
+    padding: 20px;
 }

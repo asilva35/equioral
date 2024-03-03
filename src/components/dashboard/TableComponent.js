@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import {
   Table,
@@ -10,11 +10,24 @@ import {
   Pagination,
   Button,
   CircularProgress,
+  Input,
+  Image,
 } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 
+// Debounce function
+function debounce(func, delay) {
+  let timeoutId = setTimeout(func, delay);
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
 export default function TableComponent(props) {
-  const { data } = props;
+  const { data, onSearchChange, showSearch } = props;
   const router = useRouter();
   const renderCell = React.useCallback((record, columnKey) => {
     if (data.renderCell)
@@ -39,6 +52,14 @@ export default function TableComponent(props) {
     }
   };
 
+  const debouncedOnChange = useCallback(
+    debounce((e) => {
+      if (!e) return;
+      onSearchChange(e.target.value);
+    }, 1000),
+    []
+  );
+
   return (
     <>
       <div className="header">
@@ -54,6 +75,29 @@ export default function TableComponent(props) {
           </Button>
         )}
       </div>
+      {showSearch && (
+        <div className="search">
+          <Input
+            type="text"
+            label="Search"
+            variant="bordered"
+            placeholder="Enter your search term..."
+            className="max-w-xs"
+            onChange={(e) => {
+              e.persist(); // React pools events, so we need to persist the event
+              debouncedOnChange(e);
+            }}
+            startContent={
+              <Image
+                src="/assets/images/icon-search.svg"
+                width={20}
+                height={20}
+                alt=""
+              />
+            }
+          />
+        </div>
+      )}
       <div className="flex flex-col gap-3">
         <Table aria-label={data.title} selectionMode="single">
           <TableHeader columns={data.columns}>
@@ -91,6 +135,13 @@ export default function TableComponent(props) {
           width: 100%;
           display: flex;
           justify-content: flex-start;
+          padding: 20px 10px;
+          gap: 20px;
+        }
+        .search {
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
           padding: 20px 10px;
           gap: 20px;
         }

@@ -16,12 +16,16 @@ import {
   Textarea,
   Button,
   CircularProgress,
+  Input,
+  Select,
+  SelectItem,
 } from '@nextui-org/react';
 
 import ModalComponent from '@/components/dashboard/ModalComponent';
 import MediaUpload from '@/components/dashboard/MediaUpload';
 
 import generatePDF from 'react-to-pdf';
+import { toast } from 'react-toastify';
 
 // Debounce function
 function debounce(func, delay) {
@@ -57,6 +61,7 @@ function HistoryDetail() {
 
   const [showModalChangeImage, setShowModalChangeImage] = React.useState(0);
   const [showModalPdf, setShowModalPdf] = React.useState(0);
+  const [showModalShare, setShowModalShare] = React.useState(0);
   const [allowUploadImage, setAllowUploadImage] = React.useState(false);
   const [savingImage, setSavingImage] = React.useState(false);
   const [recordImage, setRecordImage] = React.useState(null);
@@ -73,6 +78,9 @@ function HistoryDetail() {
   const [history, setHistory] = useState(null);
   const [changeField, setChangeField] = useState(false);
   const [savingRecord, setSavingRecord] = useState(false);
+  const [savingRecordShare, setSavingRecordShare] = useState(false);
+
+  const [validation, setValidation] = React.useState({});
 
   const first_observation_ref = React.useRef(null);
   const treatment_ref = React.useRef(null);
@@ -101,6 +109,23 @@ function HistoryDetail() {
     }
   }, [patient_id]);
 
+  const generateUUID = (length) => {
+    let d = new Date().getTime();
+    const uuid = Array(length + 1)
+      .join('x')
+      .replace(/[x]/g, (c) => {
+        const r = (d + Math.random() * 16) % 16 | 0;
+        d = Math.floor(d / 16);
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      });
+    return uuid.slice(0, length);
+  };
+
+  const share_enabled_options = [
+    { value: 'enabled', label: 'Enabled' },
+    { value: 'disabled', label: 'Disabled' },
+  ];
+
   useEffect(() => {
     async function fetchData(history_id) {
       const historyBD = await getHistory(history_id);
@@ -110,7 +135,20 @@ function HistoryDetail() {
         historyBD.data.records &&
         historyBD.data.records.length > 0
       ) {
-        setHistory(historyBD.data.records[0]);
+        const newhistory = historyBD.data.records[0];
+        if (!newhistory.share_options) {
+          const share_id = generateUUID(12);
+          newhistory.share_id = share_id;
+          const share_time = new Date().getTime();
+          newhistory.share_options = {
+            share_time,
+            share_expiration: 1,
+            share_password: '',
+            share_enabled: 'enabled',
+            share_url: `${process.env.NEXT_PUBLIC_BASE_URL}/share-history/${share_id}`,
+          };
+        }
+        setHistory(newhistory);
       }
     }
     if (history_id) {
@@ -219,6 +257,8 @@ function HistoryDetail() {
     if (!history) return;
     saveRecord();
   }, [history]);
+
+  const refInputShareUrl = React.useRef(null);
 
   return (
     <>
@@ -336,28 +376,44 @@ function HistoryDetail() {
                 </CardHeader>
               </Card>
               {history && history.id && (
-                <Button
-                  color="danger"
-                  variant="shadow"
-                  className={`${styles.MainButton}`}
-                  onClick={() => {
-                    // const filename = history.id
-                    //   ? `${history.id}.pdf`
-                    //   : 'history.pdf';
-                    // generatePDF(targetPdfRef, { filename });
-                    setShowModalPdf((currCount) => currCount + 1);
-                  }}
-                  startContent={
-                    <Image
-                      src="/assets/images/icon-pdf.svg"
-                      width={24}
-                      height={24}
-                      alt=""
-                    />
-                  }
-                >
-                  PDF
-                </Button>
+                <div className={`${styles.HeaderActions}`}>
+                  <Button
+                    color="danger"
+                    variant="shadow"
+                    className={`${styles.MainButton}`}
+                    onClick={() => {
+                      setShowModalPdf((currCount) => currCount + 1);
+                    }}
+                    startContent={
+                      <Image
+                        src="/assets/images/icon-pdf.svg"
+                        width={24}
+                        height={24}
+                        alt=""
+                      />
+                    }
+                  >
+                    PDF
+                  </Button>
+                  <Button
+                    color="success"
+                    variant="shadow"
+                    className={`${styles.MainButton}`}
+                    onClick={() => {
+                      setShowModalShare((currCount) => currCount + 1);
+                    }}
+                    startContent={
+                      <Image
+                        src="/assets/images/icon-share.svg"
+                        width={24}
+                        height={24}
+                        alt=""
+                      />
+                    }
+                  >
+                    Compartir
+                  </Button>
+                </div>
               )}
             </div>
             <div className={`${styles.Body}`}>
@@ -621,6 +677,150 @@ function HistoryDetail() {
                     />
                   ))}
               </div>
+            </div>
+          </div>
+        </ModalComponent>
+        <ModalComponent
+          show={showModalShare}
+          onSave={async () => {
+            if (!history) return;
+            if (savingRecordShare) return;
+            setSavingRecordShare(true);
+            const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/update`;
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ record_request: history }),
+            });
+            if (response.ok) {
+              toast.success('Registro Guardado con éxito');
+            } else {
+              toast.error('Ocurrió un error al guardar el registro');
+            }
+            setSavingRecordShare(false);
+          }}
+          labelButtonSave="Guardar Url"
+          title="Compartir Historia"
+          onCloseModal={() => {
+            setSavingRecordShare(false);
+          }}
+          allowSave={!savingRecordShare}
+          savingRecord={savingRecordShare}
+        >
+          <div className={`${styles.ShareOptions}`}>
+            <div className={`${styles.ShareOption}`}>
+              <Input
+                isReadOnly={true}
+                isRequired={true}
+                ref={refInputShareUrl}
+                type="text"
+                label="Link para compartir"
+                isInvalid={validation['share_url'] ? true : false}
+                errorMessage={validation['share_url']}
+                onChange={(e) => {}}
+                defaultValue={
+                  history && history.share_options
+                    ? history.share_options.share_url
+                    : ''
+                }
+                endContent={
+                  <Button
+                    color="primary"
+                    size="sm"
+                    variant="light"
+                    onClick={() => {
+                      if (navigator.clipboard) {
+                        navigator.clipboard
+                          .writeText(refInputShareUrl.current.value)
+                          .then(
+                            function () {
+                              console.log(
+                                'Copying to clipboard was successful!'
+                              );
+                            },
+                            function (err) {
+                              console.error('Could not copy text: ', err);
+                            }
+                          );
+                      } else {
+                        refInputShareUrl.current.select();
+                        document.execCommand('copy');
+                      }
+                    }}
+                  >
+                    Copy
+                  </Button>
+                }
+              />
+            </div>
+            <div className={`${styles.ShareOption}`}>
+              <Input
+                type="number"
+                label="Expiration"
+                isInvalid={validation['share_expiration'] ? true : false}
+                errorMessage={validation['share_expiration']}
+                onChange={(e) => {
+                  if (Number.parseInt(e.target.value) < 0) {
+                    e.target.value = 0;
+                    setValidation({ share_expiration: 'Can not be negative' });
+                  } else {
+                    setValidation({});
+                    const new_record = { ...history };
+                    new_record.share_options.share_expiration = e.target.value;
+                    setHistory(new_record);
+                  }
+                }}
+                defaultValue={
+                  history && history.share_options
+                    ? Number.parseInt(history.share_options.share_expiration)
+                    : 1
+                }
+                endContent={<div className={`${styles.smallText}`}>Day(s)</div>}
+              />
+            </div>
+            <div className={`${styles.ShareOption}`}>
+              <Input
+                type="text"
+                label="Password"
+                isInvalid={validation['share_password'] ? true : false}
+                errorMessage={validation['share_password']}
+                onChange={(e) => {
+                  const new_record = { ...history };
+                  new_record.share_options.share_password = e.target.value;
+                  setHistory(new_record);
+                }}
+                defaultValue={
+                  history && history.share_options
+                    ? history.share_options.password
+                    : ''
+                }
+              />
+            </div>
+            <div className={`${styles.ShareOption}`}>
+              <Select
+                items={share_enabled_options}
+                className="max-w-xs"
+                selectionMode={'single'}
+                defaultSelectedKeys={
+                  history && history.share_options
+                    ? [history.share_options.share_enabled]
+                    : ['enabled']
+                }
+                isRequired={true}
+                isInvalid={validation['share_enabled'] ? true : false}
+                errorMessage={validation['share_enabled']}
+                onChange={(e) => {
+                  const new_record = { ...history };
+                  new_record.share_options.share_enabled = e.target.value;
+                  setHistory(new_record);
+                }}
+              >
+                {(item) => (
+                  <SelectItem key={item.value}>{item.label}</SelectItem>
+                )}
+              </Select>
             </div>
           </div>
         </ModalComponent>

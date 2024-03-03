@@ -11,11 +11,12 @@ async function getRecords(
   urlGetRecords,
   page = 1,
   pageSize = 5,
-  status = 'all'
+  status = 'all',
+  search = ''
 ) {
   let url = `${urlGetRecords}`;
   url += url.indexOf('?') === -1 ? '?' : '&';
-  url += `page=${page}&pageSize=${pageSize}&status=${status}`;
+  url += `page=${page}&pageSize=${pageSize}&status=${status}&search=${search}`;
   const res = await fetch(url);
   return await res.json();
 }
@@ -53,6 +54,7 @@ export default function MainScreenObject(props) {
     tablePageSize,
     model,
     tableComponentData,
+    showSearch,
     modalComponentData,
     schema,
   } = props;
@@ -61,6 +63,7 @@ export default function MainScreenObject(props) {
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(tablePageSize);
   const [refreshTable, setRefreshTable] = React.useState(0);
+  const [searchQuery, setSearchQuery] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
   const { status } = router.query;
@@ -101,7 +104,8 @@ export default function MainScreenObject(props) {
           urlGetRecords,
           page,
           pageSize,
-          status
+          status,
+          searchQuery
         );
 
         if (
@@ -128,9 +132,9 @@ export default function MainScreenObject(props) {
         }
         setLoading(false);
       };
-      fetchRecords(page, pageSize);
+      fetchRecords();
     }
-  }, [page, pageSize, status, refreshTable, urlGetRecords]);
+  }, [page, pageSize, status, searchQuery, refreshTable, urlGetRecords]);
 
   useEffect(() => {
     setFormatedSchema(formatSchema(schema, listRecords));
@@ -251,6 +255,10 @@ export default function MainScreenObject(props) {
           },
           renderCell: tableComponentData.renderCell,
           showRecordDetail: showRecordDetail,
+        }}
+        showSearch={showSearch}
+        onSearchChange={(value) => {
+          setSearchQuery(value);
         }}
       />
       <ModalComponent

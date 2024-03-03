@@ -1,20 +1,37 @@
 import { getRecords } from '@/vidashy-sdk/dist/backend';
 import { getToken } from 'next-auth/jwt';
-import { filterBy, filterValue } from '@/utils/filters';
 
-async function listRecords(patient_id, page = 1, pageSize = 5) {
+async function listRecords(patient_id, page = 1, pageSize = 5, search = '') {
+  const params = {
+    page,
+    pageSize,
+    filter: {
+      patient_id,
+    },
+  };
+  if (search) {
+    params.filter = {
+      and: [
+        { or: [{ patient_id }] },
+        {
+          or: [
+            {
+              first_observation: { regex: `.*${search}.*`, optionsRegex: 'i' },
+            },
+            { treatment: { regex: `.*${search}.*`, optionsRegex: 'i' } },
+          ],
+        },
+      ],
+    };
+  }
   return await getRecords({
     backend_url: process.env.VIDASHY_URL,
     organization: process.env.VIDASHY_ORGANIZATION,
     database: process.env.VIDASHY_DATABASE,
     object: 'histories',
     api_key: process.env.VIDASHY_API_KEY,
-    params: {
-      page,
-      pageSize,
-      filterBy: filterBy({ patient_id }),
-      filterValue: filterValue({ patient_id }),
-    },
+    v: '1.1',
+    params,
   });
 }
 
@@ -25,14 +42,14 @@ export default async function handler(req, res) {
     if (!token)
       return res.status(401).send({ data: {}, message: 'Not authorized' });
 
-    const { page, pageSize, patient_id } = req.query;
+    const { page, pageSize, patient_id, search } = req.query;
     const { role } = token;
 
     if (role !== 'admin') {
       return res.status(401).send({ data: {}, message: 'Not authorized' });
     }
 
-    let records = await listRecords(patient_id, page, pageSize);
+    let records = await listRecords(patient_id, page, pageSize, search);
 
     if (!records || !records.records || records.records.length === 0)
       return res

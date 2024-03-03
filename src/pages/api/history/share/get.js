@@ -1,32 +1,18 @@
 import { getRecords } from '@/vidashy-sdk/dist/backend';
 import { getToken } from 'next-auth/jwt';
+import { filterBy, filterValue } from '@/utils/filters';
 
-async function listRecords(page = 1, pageSize = 5, search = '') {
-  const params = {
-    page,
-    pageSize,
-  };
-  if (search) {
-    params.filter = {
-      or: [
-        {
-          horse: { regex: `.*${search}.*`, optionsRegex: 'i' },
-        },
-        { horse_farm: { regex: `.*${search}.*`, optionsRegex: 'i' } },
-        { owner_name: { regex: `.*${search}.*`, optionsRegex: 'i' } },
-        { owner_phone: { regex: `.*${search}.*`, optionsRegex: 'i' } },
-        { status: { regex: `.*${search}.*`, optionsRegex: 'i' } },
-      ],
-    };
-  }
+async function getRecord(share_id) {
   return await getRecords({
     backend_url: process.env.VIDASHY_URL,
     organization: process.env.VIDASHY_ORGANIZATION,
     database: process.env.VIDASHY_DATABASE,
-    object: 'patients',
+    object: 'histories',
     api_key: process.env.VIDASHY_API_KEY,
-    v: '1.1',
-    params,
+    params: {
+      filterBy: filterBy({ share_id }),
+      filterValue: filterValue({ share_id }),
+    },
   });
 }
 
@@ -37,14 +23,9 @@ export default async function handler(req, res) {
     if (!token)
       return res.status(401).send({ data: {}, message: 'Not authorized' });
 
-    const { page, pageSize, search } = req.query;
-    const { role } = token;
+    const { share_id } = req.query;
 
-    if (role !== 'admin') {
-      return res.status(401).send({ data: {}, message: 'Not authorized' });
-    }
-
-    let records = await listRecords(page, pageSize, search);
+    let records = await getRecord(share_id);
 
     if (!records || !records.records || records.records.length === 0)
       return res
