@@ -1,5 +1,4 @@
 import { getRecords } from '@/vidashy-sdk/dist/backend';
-import { getToken } from 'next-auth/jwt';
 import { filterBy, filterValue } from '@/utils/filters';
 
 async function getRecord(share_id) {
@@ -18,11 +17,6 @@ async function getRecord(share_id) {
 
 export default async function handler(req, res) {
   try {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    if (!token)
-      return res.status(401).send({ data: {}, message: 'Not authorized' });
-
     const { share_id } = req.query;
 
     let records = await getRecord(share_id);
