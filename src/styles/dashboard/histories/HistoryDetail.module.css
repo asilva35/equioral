@@ -218,6 +218,11 @@
     justify-content: flex-end;
 }
 
+.PdfLogo{
+    width: 176px;
+    height: 89px;
+}
+
 .PdfBody{
     width: 100%;
     padding: 40px 0;

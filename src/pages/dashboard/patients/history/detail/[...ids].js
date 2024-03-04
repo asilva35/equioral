@@ -24,7 +24,7 @@ import {
 import ModalComponent from '@/components/dashboard/ModalComponent';
 import MediaUpload from '@/components/dashboard/MediaUpload';
 
-import generatePDF from 'react-to-pdf';
+import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 import { toast } from 'react-toastify';
 
 // Debounce function
@@ -593,7 +593,7 @@ function HistoryDetail() {
           size="5xl"
           show={showModalPdf}
           onSave={() => {
-            const filename = 'history.pdf';
+            const filename = 'historia.pdf';
             generatePDF(targetPdfRef, { filename });
           }}
           labelButtonSave="Descargar"
@@ -637,11 +637,12 @@ function HistoryDetail() {
 
               <div className={`${styles.PdfRightHeader}`}>
                 <div className={`${styles.PdfLogo}`}>
-                  <Image
+                  <img
                     src="/assets/images/theme-light/logo.png"
                     width={176}
                     height={89}
                     alt="Logo"
+                    style={{ width: '176px', height: '89px' }}
                   />
                 </div>
               </div>
@@ -667,7 +668,7 @@ function HistoryDetail() {
                 {history &&
                   Array.isArray(history.photos) &&
                   history.photos.map((photo, index) => (
-                    <Image
+                    <img
                       key={index}
                       src={photo.src}
                       width={100}
