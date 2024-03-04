@@ -675,6 +675,7 @@ function HistoryDetail() {
                       height={100}
                       alt=""
                       className={`${styles.PdfPhoto}`}
+                      style={{ width: '100px', height: '100px' }}
                     />
                   ))}
               </div>
