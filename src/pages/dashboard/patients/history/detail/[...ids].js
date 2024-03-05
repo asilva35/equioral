@@ -677,7 +677,8 @@ function HistoryDetail() {
                   history.photos.map((photo, index) => (
                     <img
                       key={index}
-                      src={photo.src}
+                      //src={photo.src}
+                      src={`/assets/images/temp/01.jpeg`}
                       width={100}
                       height={100}
                       alt=""
