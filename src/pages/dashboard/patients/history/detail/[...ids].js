@@ -668,14 +668,22 @@ function HistoryDetail() {
                 {history &&
                   Array.isArray(history.photos) &&
                   history.photos.map((photo, index) => (
-                    <img
+                    // <img
+                    //   key={index}
+                    //   src={photo.src}
+                    //   width={100}
+                    //   height={100}
+                    //   alt=""
+                    //   className={`${styles.PdfPhoto}`}
+                    //   style={{ width: '100px', height: '100px' }}
+                    // />
+                    <Image
                       key={index}
                       src={photo.src}
                       width={100}
                       height={100}
                       alt=""
                       className={`${styles.PdfPhoto}`}
-                      style={{ width: '100px', height: '100px' }}
                     />
                   ))}
               </div>
