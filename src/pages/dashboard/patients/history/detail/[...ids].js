@@ -594,7 +594,14 @@ function HistoryDetail() {
           show={showModalPdf}
           onSave={() => {
             const filename = 'historia.pdf';
-            generatePDF(targetPdfRef, { filename });
+            const options = {
+              overrides: {
+                canvas: {
+                  useCORS: true,
+                },
+              },
+            };
+            generatePDF(targetPdfRef, options);
           }}
           labelButtonSave="Descargar"
           title="Descargar Pdf"
@@ -675,7 +682,7 @@ function HistoryDetail() {
                       height={100}
                       alt=""
                       className={`${styles.PdfPhoto}`}
-                      style={{ width: '100px', height: '100px' }}
+                      style={{ width: '100px', height: 'auto' }}
                     />
                     // <Image
                     //   key={index}

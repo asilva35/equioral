@@ -253,9 +253,7 @@
 
 .PdfPhoto{
     width: 250px;
-    min-height: 100px;
     height: auto;
-    border: solid 10px #ccc;
 }
 
 .PdfPhotos img{
