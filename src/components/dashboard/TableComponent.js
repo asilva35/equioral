@@ -31,7 +31,12 @@ export default function TableComponent(props) {
   const router = useRouter();
   const renderCell = React.useCallback((record, columnKey) => {
     if (data.renderCell)
-      return data.renderCell(record, columnKey, data.showRecordDetail);
+      return data.renderCell(
+        record,
+        columnKey,
+        data.showRecordDetail,
+        data.showModalDelete
+      );
 
     const cellValue = record[columnKey];
     return cellValue;

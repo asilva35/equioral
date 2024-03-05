@@ -15,11 +15,12 @@ function ListPatients() {
   const urlGetRecords = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/list`;
   const urlNewRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/new`;
   const urlUpdateRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/update`;
+  const urlDeleteRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/delete?id={record_id}`;
   const router = useRouter();
   const viewHistory = (record) => {
     router.push('/dashboard/patients/history/' + record.id);
   };
-  const renderCell = (record, columnKey, showRecordDetail) => {
+  const renderCell = (record, columnKey, showRecordDetail, showModalDelete) => {
     const cellValue = record[columnKey];
     switch (columnKey) {
       case 'expand':
@@ -79,6 +80,27 @@ function ListPatients() {
           </div>
         );
 
+      case 'delete':
+        return (
+          <div
+            style={{
+              textDecoration: 'none',
+              color: '#0070f0',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              showModalDelete(record);
+            }}
+          >
+            <Image
+              src="/assets/images/theme-light/icon-delete.svg"
+              width={24}
+              height={24}
+              alt="Borrar"
+            />
+          </div>
+        );
+
       case 'id':
         return (
           <div
@@ -116,6 +138,7 @@ function ListPatients() {
           urlGetRecords={urlGetRecords}
           urlNewRecord={urlNewRecord}
           urlUpdateRecord={urlUpdateRecord}
+          urlDeleteRecord={urlDeleteRecord}
           tablePageSize={5}
           model={patientModel}
           tableComponentData={{
@@ -130,6 +153,7 @@ function ListPatients() {
               { key: 'horse', label: 'Caballo' },
               { key: 'date', label: 'Fecha' },
               { key: 'history', label: 'Historia' },
+              { key: 'delete', label: '' },
             ],
             renderCell,
           }}

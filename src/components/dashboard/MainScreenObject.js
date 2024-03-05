@@ -51,6 +51,7 @@ export default function MainScreenObject(props) {
     urlGetRecords,
     urlNewRecord,
     urlUpdateRecord,
+    urlDeleteRecord,
     tablePageSize,
     model,
     tableComponentData,
@@ -68,9 +69,11 @@ export default function MainScreenObject(props) {
   const router = useRouter();
   const { status } = router.query;
   const [showModalProductDetail, setShowModalRecord] = React.useState(0);
+  const [showModalDeleteRecord, setShowModalDeleteRecord] = React.useState(0);
   const [showModalChangeImage, setShowModalChangeImage] = React.useState(0);
 
   const [recordModal, setRecordModal] = React.useState(model);
+  const [recordForDelete, setRecordForDelete] = React.useState(null);
   const [recordChange, setRecordChange] = React.useState(false);
   const [allowUploadImage, setAllowUploadImage] = React.useState(false);
   const [recordImage, setRecordImage] = React.useState(null);
@@ -145,6 +148,11 @@ export default function MainScreenObject(props) {
     setShowModalRecord((currCount) => currCount + 1);
   };
 
+  const showModalDelete = (record) => {
+    setRecordForDelete(record);
+    setShowModalDeleteRecord((currCount) => currCount + 1);
+  };
+
   const onNewRecord = () => {
     setRecordModal(model);
     setShowModalRecord((currCount) => currCount + 1);
@@ -177,6 +185,29 @@ export default function MainScreenObject(props) {
       const { message, validation } = await response.json();
       if (validation) setValidation(validation);
       //toast.error(message);
+      setSavingRecord(false);
+    }
+  };
+
+  const deleteRecord = async (record_id) => {
+    if (savingRecord) return;
+    setSavingRecord(true);
+    const url = urlDeleteRecord.replace('{record_id}', record_id);
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      toast.success('Record deleted');
+      setShowModalDeleteRecord(0);
+      setRefreshTable((currCount) => currCount + 1);
+      setSavingRecord(false);
+    } else {
+      toast.error('The record could not be deleted, please try again later.');
       setSavingRecord(false);
     }
   };
@@ -255,6 +286,7 @@ export default function MainScreenObject(props) {
           },
           renderCell: tableComponentData.renderCell,
           showRecordDetail: showRecordDetail,
+          showModalDelete: showModalDelete,
         }}
         showSearch={showSearch}
         onSearchChange={(value) => {
@@ -303,6 +335,19 @@ export default function MainScreenObject(props) {
             setAllowUploadImage(true);
           }}
         />
+      </ModalComponent>
+      <ModalComponent
+        show={showModalDeleteRecord}
+        onSave={() => {
+          deleteRecord(recordForDelete.id);
+        }}
+        title="Borrar Registro"
+        onCloseModal={() => {}}
+        allowSave={!savingRecord}
+        savingRecord={savingRecord}
+        labelButtonSave="Borrar"
+      >
+        <h1>¿Esta seguro de borrar este registro?</h1>
       </ModalComponent>
     </>
   );

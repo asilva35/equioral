@@ -24,6 +24,7 @@ function ListHistory() {
   const [urlGetRecords, setUrlGetRecords] = useState(null);
   const urlNewRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/new`;
   const urlUpdateRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/update`;
+  const urlDeleteRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/delete?id={record_id}`;
   historyModel.patient_id = patient_id;
 
   const [patient, setPatient] = useState(null);
@@ -57,7 +58,7 @@ function ListHistory() {
         record.id
     );
   };
-  const renderCell = (record, columnKey, showRecordDetail) => {
+  const renderCell = (record, columnKey, showRecordDetail, showModalDelete) => {
     const cellValue = record[columnKey];
     switch (columnKey) {
       case 'expand':
@@ -179,6 +180,28 @@ function ListHistory() {
           </div>
         );
 
+      case 'delete':
+        return (
+          <div
+            style={{
+              textDecoration: 'none',
+              color: '#0070f0',
+              cursor: 'pointer',
+              width: '24px',
+            }}
+            onClick={() => {
+              showModalDelete(record);
+            }}
+          >
+            <Image
+              src="/assets/images/theme-light/icon-delete.svg"
+              width={24}
+              height={24}
+              alt="Borrar"
+            />
+          </div>
+        );
+
       default:
         return cellValue;
     }
@@ -270,6 +293,7 @@ function ListHistory() {
           urlGetRecords={urlGetRecords}
           urlNewRecord={urlNewRecord}
           urlUpdateRecord={urlUpdateRecord}
+          urlDeleteRecord={urlDeleteRecord}
           tablePageSize={5}
           model={historyModel}
           tableComponentData={{
@@ -284,6 +308,7 @@ function ListHistory() {
               { key: 'first_observation', label: 'Observación Inicial' },
               { key: 'treatment', label: 'Tratamiento' },
               { key: 'photos', label: 'Fotos' },
+              { key: 'delete', label: '' },
             ],
             renderCell,
           }}
