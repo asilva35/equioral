@@ -251,6 +251,13 @@
     gap: 20px;
 }
 
+.PdfPhoto{
+    width: 250px;
+    min-height: 100px;
+    height: auto;
+    border: solid 10px #ccc;
+}
+
 .PdfPhotos img{
     width: 250px;
     height: auto;
