@@ -68,6 +68,7 @@ function ListHistory() {
             onClick={() => {
               viewHistoryDetail(record);
             }}
+            style={{ cursor: 'pointer', width: '12px' }}
           >
             <Image
               src="/assets/images/icon-expand.svg"

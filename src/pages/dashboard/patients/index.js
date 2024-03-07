@@ -30,6 +30,7 @@ function ListPatients() {
             onClick={() => {
               showRecordDetail(record);
             }}
+            style={{ cursor: 'pointer', width: '12px' }}
           >
             <Image
               src="/assets/images/icon-expand.svg"
@@ -87,6 +88,7 @@ function ListPatients() {
               textDecoration: 'none',
               color: '#0070f0',
               cursor: 'pointer',
+              width: '24px',
             }}
             onClick={() => {
               showModalDelete(record);
