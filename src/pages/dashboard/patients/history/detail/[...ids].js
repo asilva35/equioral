@@ -678,15 +678,35 @@ function HistoryDetail() {
                         reader.readAsDataURL(blob);
                       });
                     return (
-                      <img
-                        key={index}
-                        src={photo.base64}
-                        width={100}
-                        height={100}
-                        alt=""
-                        className={`${styles.PdfPhoto}`}
-                        style={{ width: '100px', height: 'auto' }}
-                      />
+                      <div key={index}>
+                        <img
+                          key={index}
+                          src={photo.base64}
+                          width={100}
+                          height={100}
+                          alt=""
+                          className={`${styles.PdfPhoto}`}
+                          style={{
+                            width: '100px',
+                            height: 'auto',
+                            minHeight: '50px',
+                            border: '2px solid #000',
+                          }}
+                        />
+                        <Image
+                          src={photo.src}
+                          width={100}
+                          height={100}
+                          alt=""
+                          className={`${styles.PdfPhoto}`}
+                          style={{
+                            width: '100px',
+                            height: 'auto',
+                            minHeight: '50px',
+                            border: '2px solid #f00',
+                          }}
+                        />
+                      </div>
                     );
                   })}
               </div>
