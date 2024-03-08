@@ -88,6 +88,8 @@ function HistoryDetail() {
 
   const targetPdfRef = React.useRef();
 
+  const [photoB64, setPhotoB64] = React.useState(null);
+
   useEffect(() => {
     async function fetchData(patient_id) {
       const patientBD = await getPatient(patient_id);
@@ -184,12 +186,16 @@ function HistoryDetail() {
     if (savingRecord) return;
     setSavingRecord(changeField);
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/update`;
+    const new_history = { ...history };
+    new_history.photos.map((photo) => {
+      delete photo.base64;
+    });
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ record_request: history }),
+      body: JSON.stringify({ record_request: new_history }),
     });
 
     if (response.ok) {
@@ -720,12 +726,16 @@ function HistoryDetail() {
             if (savingRecordShare) return;
             setSavingRecordShare(true);
             const url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/update`;
+            const new_history = { ...history };
+            new_history.photos.map((photo) => {
+              delete photo.base64;
+            });
             const response = await fetch(url, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ record_request: history }),
+              body: JSON.stringify({ record_request: new_history }),
             });
             if (response.ok) {
               toast.success('Registro Guardado con éxito');
