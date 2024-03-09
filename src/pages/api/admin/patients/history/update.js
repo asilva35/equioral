@@ -62,7 +62,6 @@ export default async function handler(req, res) {
     }
 
     const { record_request } = req.body;
-    console.log('record_request', record_request);
 
     const response = await updateRecord(record_request);
 

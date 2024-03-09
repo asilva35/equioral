@@ -699,7 +699,7 @@ function HistoryDetail() {
                             border: '2px solid #000',
                           }}
                         />
-                        <Image
+                        {/* <Image
                           src={photo.src}
                           width={100}
                           height={100}
@@ -711,7 +711,7 @@ function HistoryDetail() {
                             minHeight: '50px',
                             border: '2px solid #f00',
                           }}
-                        />
+                        /> */}
                       </div>
                     );
                   })}
