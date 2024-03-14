@@ -26,6 +26,7 @@ import MediaUpload from '@/components/dashboard/MediaUpload';
 
 import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 import { toast } from 'react-toastify';
+import PdfHistoryDetail from '@/components/dashboard/histories/PdfHistoryDetail';
 
 // Debounce function
 function debounce(func, delay) {
@@ -61,6 +62,7 @@ function HistoryDetail() {
 
   const [showModalChangeImage, setShowModalChangeImage] = React.useState(0);
   const [showModalPdf, setShowModalPdf] = React.useState(0);
+  const [showModalPdfV2, setShowModalPdfV2] = React.useState(0);
   const [showModalShare, setShowModalShare] = React.useState(0);
   const [allowUploadImage, setAllowUploadImage] = React.useState(false);
   const [savingImage, setSavingImage] = React.useState(false);
@@ -402,6 +404,24 @@ function HistoryDetail() {
                     PDF
                   </Button>
                   <Button
+                    color="primary"
+                    variant="shadow"
+                    className={`${styles.MainButton}`}
+                    onClick={() => {
+                      setShowModalPdfV2((currCount) => currCount + 1);
+                    }}
+                    startContent={
+                      <Image
+                        src="/assets/images/icon-pdf.svg"
+                        width={24}
+                        height={24}
+                        alt=""
+                      />
+                    }
+                  >
+                    PDF
+                  </Button>
+                  <Button
                     color="success"
                     variant="shadow"
                     className={`${styles.MainButton}`}
@@ -688,12 +708,12 @@ function HistoryDetail() {
                         <img
                           key={index}
                           src={photo.base64}
-                          width={100}
-                          height={100}
+                          width={512}
+                          height={512}
                           alt=""
                           className={`${styles.PdfPhoto}`}
                           style={{
-                            width: '100px',
+                            width: '512px',
                             height: 'auto',
                             minHeight: '50px',
                             border: '2px solid #000',
@@ -701,12 +721,12 @@ function HistoryDetail() {
                         />
                         {/* <Image
                           src={photo.src}
-                          width={100}
-                          height={100}
+                          width={512}
+                          height={512}
                           alt=""
                           className={`${styles.PdfPhoto}`}
                           style={{
-                            width: '100px',
+                            width: '512px',
                             height: 'auto',
                             minHeight: '50px',
                             border: '2px solid #f00',
@@ -718,6 +738,21 @@ function HistoryDetail() {
               </div>
             </div>
           </div>
+        </ModalComponent>
+        <ModalComponent
+          size="5xl"
+          show={showModalPdfV2}
+          onSave={() => {
+            // const filename = 'historia.pdf';
+            // generatePDF(targetPdfRef, { filename });
+          }}
+          labelButtonSave="Descargar"
+          title="Descargar Pdf"
+          onCloseModal={() => {}}
+          allowSave={() => {}}
+          savingRecord={false}
+        >
+          <PdfHistoryDetail history={history} patient={patient} />
         </ModalComponent>
         <ModalComponent
           show={showModalShare}

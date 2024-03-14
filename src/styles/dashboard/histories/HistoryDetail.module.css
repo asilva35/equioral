@@ -252,12 +252,12 @@
 }
 
 .PdfPhoto{
-    width: 250px;
+    width: 512px;
     height: auto;
 }
 
 .PdfPhotos img{
-    width: 250px;
+    width: 512px;
     height: auto;
 }
 
