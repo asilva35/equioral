@@ -7,6 +7,7 @@ import historyModel from '@/models/historyModel';
 import Image from 'next/image';
 import { formatDate, capitalizeFirstLetter, shortUUID } from '@/utils/utils';
 import { useRouter } from 'next/router';
+import Resizer from 'react-image-file-resizer';
 import styles from '@/styles/dashboard/histories/HistoryDetail.module.css';
 
 import {
@@ -223,38 +224,52 @@ function HistoryDetail() {
     );
 
     if (response.ok) {
-      const { url, fields, mediaKey, urlMedia } = await response.json();
-      const formData = new FormData();
-      Object.entries(fields).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      formData.append('file', recordImage);
+      Resizer.imageFileResizer(
+        recordImage,
+        300,
+        300,
+        'JPEG',
+        100,
+        0,
+        async (imageResized) => {
+          console.log(imageResized);
+          const { url, fields, mediaKey, urlMedia } = await response.json();
+          const formData = new FormData();
+          Object.entries(fields).forEach(([key, value]) => {
+            formData.append(key, value);
+          });
+          formData.append('file', imageResized);
 
-      const uploadResponse = await fetch(url, {
-        method: 'POST',
-        body: formData,
-      });
+          const uploadResponse = await fetch(url, {
+            method: 'POST',
+            body: formData,
+          });
 
-      if (uploadResponse.ok) {
-        //toast.success('Image Saved');
-        const newRecord = { ...history };
-        if (Array.isArray(fieldImage)) {
-          newRecord[fieldImage[0]] = [
-            ...newRecord[fieldImage[0]],
-            { src: urlMedia },
-          ];
-        } else {
-          newRecord[fieldImage] = { src: urlMedia };
-        }
-        setHistory(newRecord);
-        setChangeField('photos');
-        //setRecordChange(true);
-      } else {
-        //toast.error('Error saving image');
-      }
-      setShowModalChangeImage(0);
-      setSavingImage(false);
-      setFieldImage(null);
+          if (uploadResponse.ok) {
+            //toast.success('Image Saved');
+            const newRecord = { ...history };
+            if (Array.isArray(fieldImage)) {
+              newRecord[fieldImage[0]] = [
+                ...newRecord[fieldImage[0]],
+                { src: urlMedia },
+              ];
+            } else {
+              newRecord[fieldImage] = { src: urlMedia };
+            }
+            setHistory(newRecord);
+            setChangeField('photos');
+            //setRecordChange(true);
+          } else {
+            //toast.error('Error saving image');
+          }
+          setShowModalChangeImage(0);
+          setSavingImage(false);
+          setFieldImage(null);
+        },
+        'file',
+        200,
+        200
+      );
     } else {
       setSavingImage(false);
       setFieldImage(null);
@@ -708,12 +723,12 @@ function HistoryDetail() {
                         <img
                           key={index}
                           src={photo.base64}
-                          width={512}
-                          height={512}
+                          width={150}
+                          height={150}
                           alt=""
                           className={`${styles.PdfPhoto}`}
                           style={{
-                            width: '512px',
+                            width: '150px',
                             height: 'auto',
                             minHeight: '50px',
                             border: '2px solid #000',
@@ -721,12 +736,12 @@ function HistoryDetail() {
                         />
                         {/* <Image
                           src={photo.src}
-                          width={512}
-                          height={512}
+                          width={150}
+                          height={150}
                           alt=""
                           className={`${styles.PdfPhoto}`}
                           style={{
-                            width: '512px',
+                            width: '150px',
                             height: 'auto',
                             minHeight: '50px',
                             border: '2px solid #f00',
