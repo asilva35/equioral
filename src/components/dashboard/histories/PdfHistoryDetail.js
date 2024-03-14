@@ -8,9 +8,10 @@ import {
   Document,
   StyleSheet,
   PDFViewer,
+  PDFDownloadLink,
 } from '@react-pdf/renderer';
 
-export default function PdfHistoryDetail(props) {
+const MyDoc = (props) => {
   const { history, patient } = props;
   const styles = StyleSheet.create({
     page: {
@@ -70,73 +71,87 @@ export default function PdfHistoryDetail(props) {
     },
   });
   return (
-    <PDFViewer style={{ height: '90vh', width: '100%' }}>
-      <Document>
-        <Page size="A4" style={styles.page}>
-          <View style={styles.header}>
-            <View style={styles.section}>
-              <View style={styles.row}>
-                <Text style={styles.title}>Id Historia: </Text>
-                <Text style={styles.text}>{history ? history.id : ''}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.title}>Criadero: </Text>
-                <Text style={styles.text}>
-                  {patient ? patient.horse_farm : ''}
-                </Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.title}>Dueño: </Text>
-                <Text style={styles.text}>
-                  {patient ? patient.owner_name : ''}
-                </Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.title}>Caballo: </Text>
-                <Text style={styles.text}>{patient ? patient.horse : ''}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.title}>Teléfono: </Text>
-                <Text style={styles.text}>
-                  {patient ? patient.owner_phone : ''}
-                </Text>
-              </View>
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.header}>
+          <View style={styles.section}>
+            <View style={styles.row}>
+              <Text style={styles.title}>Id Historia: </Text>
+              <Text style={styles.text}>{history ? history.id : ''}</Text>
             </View>
-            <View style={styles.logoContainer}>
-              <Image
-                style={styles.logo}
-                src={`/assets/images/theme-light/logo.png`}
-                alt="Logo Equioral"
-              />
-            </View>
-          </View>
-          <View style={styles.body}>
-            <View style={styles.col}>
-              <Text style={styles.title}> Observación Inicial </Text>
+            <View style={styles.row}>
+              <Text style={styles.title}>Criadero: </Text>
               <Text style={styles.text}>
-                {history ? history.first_observation : ''}
+                {patient ? patient.horse_farm : ''}
               </Text>
             </View>
-            <View style={styles.col}>
-              <Text style={styles.title}> Tratamiento </Text>
+            <View style={styles.row}>
+              <Text style={styles.title}>Dueño: </Text>
               <Text style={styles.text}>
-                {history ? history.treatment : ''}
+                {patient ? patient.owner_name : ''}
               </Text>
             </View>
-            <View style={styles.photos}>
-              {history &&
-                Array.isArray(history.photos) &&
-                history.photos.map((photo, index) => {
-                  return (
-                    <div key={index}>
-                      <Image src={photo.src} alt="" style={styles.photo} />
-                    </div>
-                  );
-                })}
+            <View style={styles.row}>
+              <Text style={styles.title}>Caballo: </Text>
+              <Text style={styles.text}>{patient ? patient.horse : ''}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.title}>Teléfono: </Text>
+              <Text style={styles.text}>
+                {patient ? patient.owner_phone : ''}
+              </Text>
             </View>
           </View>
-        </Page>
-      </Document>
-    </PDFViewer>
+          <View style={styles.logoContainer}>
+            <Image
+              style={styles.logo}
+              src={`/assets/images/theme-light/logo.png`}
+              alt="Logo Equioral"
+            />
+          </View>
+        </View>
+        <View style={styles.body}>
+          <View style={styles.col}>
+            <Text style={styles.title}> Observación Inicial </Text>
+            <Text style={styles.text}>
+              {history ? history.first_observation : ''}
+            </Text>
+          </View>
+          <View style={styles.col}>
+            <Text style={styles.title}> Tratamiento </Text>
+            <Text style={styles.text}>{history ? history.treatment : ''}</Text>
+          </View>
+          <View style={styles.photos}>
+            {history &&
+              Array.isArray(history.photos) &&
+              history.photos.map((photo, index) => {
+                return (
+                  <div key={index}>
+                    <Image src={photo.src} alt="" style={styles.photo} />
+                  </div>
+                );
+              })}
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+export default function PdfHistoryDetail(props) {
+  const { history, patient } = props;
+
+  return (
+    // <PDFViewer style={{ height: '90vh', width: '100%' }}>
+    <PDFDownloadLink
+      document={<MyDoc history={history} patient={patient} />}
+      fileName="somename.pdf"
+    >
+      {({ blob, url, loading, error }) =>
+        loading ? 'Loading document...' : 'Download now!'
+      }
+    </PDFDownloadLink>
+
+    // </PDFViewer>
   );
 }
