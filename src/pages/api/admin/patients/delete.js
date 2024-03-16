@@ -19,7 +19,11 @@ async function deleteRecord(id) {
     });
     return response.data || null;
   } catch (error) {
-    console.error(error);
+    console.error(
+      error.response.status,
+      error.response.statusText,
+      error.response.data
+    );
     return null;
   }
 }

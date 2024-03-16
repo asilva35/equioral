@@ -7,6 +7,7 @@ import historyModel from '@/models/historyModel';
 import Image from 'next/image';
 import { formatDate, capitalizeFirstLetter, shortUUID } from '@/utils/utils';
 import { useRouter } from 'next/router';
+import Resizer from 'react-image-file-resizer';
 import styles from '@/styles/dashboard/histories/HistoryDetail.module.css';
 
 import {
@@ -26,6 +27,7 @@ import MediaUpload from '@/components/dashboard/MediaUpload';
 
 import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 import { toast } from 'react-toastify';
+import PdfHistoryDetail from '@/components/dashboard/histories/PdfHistoryDetail';
 
 import Resizer from 'react-image-file-resizer';
 
@@ -63,6 +65,7 @@ function HistoryDetail() {
 
   const [showModalChangeImage, setShowModalChangeImage] = React.useState(0);
   const [showModalPdf, setShowModalPdf] = React.useState(0);
+  const [showModalPdfV2, setShowModalPdfV2] = React.useState(0);
   const [showModalShare, setShowModalShare] = React.useState(0);
   const [allowUploadImage, setAllowUploadImage] = React.useState(false);
   const [savingImage, setSavingImage] = React.useState(false);
@@ -269,38 +272,6 @@ function HistoryDetail() {
         200,
         200
       );
-      // const { url, fields, mediaKey, urlMedia } = await response.json();
-      // const formData = new FormData();
-      // Object.entries(fields).forEach(([key, value]) => {
-      //   formData.append(key, value);
-      // });
-      // formData.append('file', recordImage);
-
-      // const uploadResponse = await fetch(url, {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-
-      // if (uploadResponse.ok) {
-      //   //toast.success('Image Saved');
-      //   const newRecord = { ...history };
-      //   if (Array.isArray(fieldImage)) {
-      //     newRecord[fieldImage[0]] = [
-      //       ...newRecord[fieldImage[0]],
-      //       { src: urlMedia },
-      //     ];
-      //   } else {
-      //     newRecord[fieldImage] = { src: urlMedia };
-      //   }
-      //   setHistory(newRecord);
-      //   setChangeField('photos');
-      //   //setRecordChange(true);
-      // } else {
-      //   //toast.error('Error saving image');
-      // }
-      // setShowModalChangeImage(0);
-      // setSavingImage(false);
-      // setFieldImage(null);
     } else {
       setSavingImage(false);
       setFieldImage(null);
@@ -437,6 +408,24 @@ function HistoryDetail() {
                     className={`${styles.MainButton}`}
                     onClick={() => {
                       setShowModalPdf((currCount) => currCount + 1);
+                    }}
+                    startContent={
+                      <Image
+                        src="/assets/images/icon-pdf.svg"
+                        width={24}
+                        height={24}
+                        alt=""
+                      />
+                    }
+                  >
+                    PDF
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="shadow"
+                    className={`${styles.MainButton}`}
+                    onClick={() => {
+                      setShowModalPdfV2((currCount) => currCount + 1);
                     }}
                     startContent={
                       <Image
@@ -766,6 +755,21 @@ function HistoryDetail() {
               </div>
             </div>
           </div>
+        </ModalComponent>
+        <ModalComponent
+          size="5xl"
+          show={showModalPdfV2}
+          onSave={() => {
+            // const filename = 'historia.pdf';
+            // generatePDF(targetPdfRef, { filename });
+          }}
+          labelButtonSave="Descargar"
+          title="Descargar Pdf"
+          onCloseModal={() => {}}
+          allowSave={() => {}}
+          savingRecord={false}
+        >
+          <PdfHistoryDetail history={history} patient={patient} />
         </ModalComponent>
         <ModalComponent
           show={showModalShare}
