@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import DetailRecord from '@/components/dashboard/DetailRecord';
 import MediaUpload from '@/components/dashboard/MediaUpload';
 import { toast } from 'react-toastify';
+import Resizer from 'react-image-file-resizer';
 
 async function getRecords(urlGetRecords, page = 1, pageSize = 5, search = '') {
   let url = `${urlGetRecords}`;
@@ -218,37 +219,50 @@ export default function MainScreenObject(props) {
     );
 
     if (response.ok) {
-      const { url, fields, mediaKey, urlMedia } = await response.json();
-      const formData = new FormData();
-      Object.entries(fields).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-      formData.append('file', recordImage);
+      Resizer.imageFileResizer(
+        recordImage,
+        300,
+        300,
+        'JPEG',
+        100,
+        0,
+        async (imageResized) => {
+          const { url, fields, mediaKey, urlMedia } = await response.json();
+          const formData = new FormData();
+          Object.entries(fields).forEach(([key, value]) => {
+            formData.append(key, value);
+          });
+          formData.append('file', imageResized);
 
-      const uploadResponse = await fetch(url, {
-        method: 'POST',
-        body: formData,
-      });
+          const uploadResponse = await fetch(url, {
+            method: 'POST',
+            body: formData,
+          });
 
-      if (uploadResponse.ok) {
-        //toast.success('Image Saved');
-        const newRecord = { ...recordModal };
-        if (Array.isArray(fieldImage)) {
-          newRecord[fieldImage[0]] = [
-            ...newRecord[fieldImage[0]],
-            { src: urlMedia },
-          ];
-        } else {
-          newRecord[fieldImage] = { src: urlMedia };
-        }
-        setRecordModal(newRecord);
-        setRecordChange(true);
-      } else {
-        toast.error('Error saving image');
-      }
-      setShowModalChangeImage(0);
-      setSavingImage(false);
-      setFieldImage(null);
+          if (uploadResponse.ok) {
+            //toast.success('Image Saved');
+            const newRecord = { ...recordModal };
+            if (Array.isArray(fieldImage)) {
+              newRecord[fieldImage[0]] = [
+                ...newRecord[fieldImage[0]],
+                { src: urlMedia },
+              ];
+            } else {
+              newRecord[fieldImage] = { src: urlMedia };
+            }
+            setRecordModal(newRecord);
+            setRecordChange(true);
+          } else {
+            toast.error('Error saving image');
+          }
+          setShowModalChangeImage(0);
+          setSavingImage(false);
+          setFieldImage(null);
+        },
+        'file',
+        200,
+        200
+      );
     } else {
       setSavingImage(false);
       setFieldImage(null);

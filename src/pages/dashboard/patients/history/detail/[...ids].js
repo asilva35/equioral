@@ -268,38 +268,6 @@ function HistoryDetail() {
         200,
         200
       );
-      // const { url, fields, mediaKey, urlMedia } = await response.json();
-      // const formData = new FormData();
-      // Object.entries(fields).forEach(([key, value]) => {
-      //   formData.append(key, value);
-      // });
-      // formData.append('file', recordImage);
-
-      // const uploadResponse = await fetch(url, {
-      //   method: 'POST',
-      //   body: formData,
-      // });
-
-      // if (uploadResponse.ok) {
-      //   //toast.success('Image Saved');
-      //   const newRecord = { ...history };
-      //   if (Array.isArray(fieldImage)) {
-      //     newRecord[fieldImage[0]] = [
-      //       ...newRecord[fieldImage[0]],
-      //       { src: urlMedia },
-      //     ];
-      //   } else {
-      //     newRecord[fieldImage] = { src: urlMedia };
-      //   }
-      //   setHistory(newRecord);
-      //   setChangeField('photos');
-      //   //setRecordChange(true);
-      // } else {
-      //   //toast.error('Error saving image');
-      // }
-      // setShowModalChangeImage(0);
-      // setSavingImage(false);
-      // setFieldImage(null);
     } else {
       setSavingImage(false);
       setFieldImage(null);
