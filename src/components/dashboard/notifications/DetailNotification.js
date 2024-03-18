@@ -23,7 +23,7 @@ import { formatDate } from '@/utils/utils';
 export default function DetailNotification(props) {
   const { userRole, record, markAsReaded } = props;
 
-  console.log(record);
+  //console.log(record);
   //const newRecord = { ...record };
   const formatValue = (key, type) => {
     if (!record) return '';

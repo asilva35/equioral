@@ -1,21 +1,34 @@
 import { getRecords } from '@/vidashy-sdk/dist/backend';
 import { getToken } from 'next-auth/jwt';
 
-async function listRecords(page = 1, pageSize = 5, search = '') {
+async function listRecords(
+  page = 1,
+  pageSize = 5,
+  status = 'active',
+  search = ''
+) {
   const params = {
     page,
     pageSize,
+    filter: {
+      status,
+    },
   };
   if (search) {
     params.filter = {
-      or: [
+      and: [
+        { and: [{ status }] },
         {
-          horse: { regex: `.*${search}.*`, optionsRegex: 'i' },
+          or: [
+            {
+              horse: { regex: `.*${search}.*`, optionsRegex: 'i' },
+            },
+            { horse_farm: { regex: `.*${search}.*`, optionsRegex: 'i' } },
+            { owner_name: { regex: `.*${search}.*`, optionsRegex: 'i' } },
+            { owner_phone: { regex: `.*${search}.*`, optionsRegex: 'i' } },
+            { status: { regex: `.*${search}.*`, optionsRegex: 'i' } },
+          ],
         },
-        { horse_farm: { regex: `.*${search}.*`, optionsRegex: 'i' } },
-        { owner_name: { regex: `.*${search}.*`, optionsRegex: 'i' } },
-        { owner_phone: { regex: `.*${search}.*`, optionsRegex: 'i' } },
-        { status: { regex: `.*${search}.*`, optionsRegex: 'i' } },
       ],
     };
   }
@@ -37,14 +50,14 @@ export default async function handler(req, res) {
     if (!token)
       return res.status(401).send({ data: {}, message: 'Not authorized' });
 
-    const { page, pageSize, search } = req.query;
+    const { page, pageSize, status, search } = req.query;
     const { role } = token;
 
     if (role !== 'admin') {
       return res.status(401).send({ data: {}, message: 'Not authorized' });
     }
 
-    let records = await listRecords(page, pageSize, search);
+    let records = await listRecords(page, pageSize, status, search);
 
     if (!records || !records.records || records.records.length === 0)
       return res

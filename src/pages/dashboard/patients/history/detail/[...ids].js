@@ -231,7 +231,6 @@ function HistoryDetail() {
         100,
         0,
         async (imageResized) => {
-          console.log(imageResized);
           const { url, fields, mediaKey, urlMedia } = await response.json();
           const formData = new FormData();
           Object.entries(fields).forEach(([key, value]) => {

@@ -7,16 +7,10 @@ import DetailRecord from '@/components/dashboard/DetailRecord';
 import MediaUpload from '@/components/dashboard/MediaUpload';
 import { toast } from 'react-toastify';
 
-async function getRecords(
-  urlGetRecords,
-  page = 1,
-  pageSize = 5,
-  status = 'all',
-  search = ''
-) {
+async function getRecords(urlGetRecords, page = 1, pageSize = 5, search = '') {
   let url = `${urlGetRecords}`;
   url += url.indexOf('?') === -1 ? '?' : '&';
-  url += `page=${page}&pageSize=${pageSize}&status=${status}&search=${search}`;
+  url += `page=${page}&pageSize=${pageSize}&search=${search}`;
   const res = await fetch(url);
   return await res.json();
 }
@@ -67,7 +61,6 @@ export default function MainScreenObject(props) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-  const { status } = router.query;
   const [showModalProductDetail, setShowModalRecord] = React.useState(0);
   const [showModalDeleteRecord, setShowModalDeleteRecord] = React.useState(0);
   const [showModalChangeImage, setShowModalChangeImage] = React.useState(0);
@@ -107,7 +100,6 @@ export default function MainScreenObject(props) {
           urlGetRecords,
           page,
           pageSize,
-          status,
           searchQuery
         );
 
@@ -137,7 +129,7 @@ export default function MainScreenObject(props) {
       };
       fetchRecords();
     }
-  }, [page, pageSize, status, searchQuery, refreshTable, urlGetRecords]);
+  }, [page, pageSize, searchQuery, refreshTable, urlGetRecords]);
 
   useEffect(() => {
     setFormatedSchema(formatSchema(schema, listRecords));

@@ -68,29 +68,20 @@ export default function ShareHistory() {
       history.share_options;
 
     if (share_enabled !== 'enabled') {
-      console.log('Enabled False');
+      //console.log('Enabled False');
       return;
     }
     if (share_expiration) {
       const expiration = share_expiration * 1000 * 60 * 60 * 24;
       const now = new Date().getTime();
 
-      console.log(
-        'Expiration',
-        share_expiration,
-        expiration,
-        now,
-        share_time,
-        now - share_time > expiration
-      );
       if (now - share_time > expiration) {
-        console.log('Expired');
+        //console.log('Expired');
         return;
       }
     }
-    console.log(history.share_options);
+
     if (share_password) {
-      console.log('Password', history.share_options.share_password);
       setShowModalPassword((prev) => prev + 1);
       return;
     }

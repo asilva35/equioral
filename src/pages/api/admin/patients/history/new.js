@@ -51,6 +51,7 @@ async function createRecord(record) {
       id: new_id.toString(),
       patient_id: record.patient_id,
       first_observation: record.first_observation,
+      status: 'active',
     });
 
     if (record.treatment) new_record.treatment = record.treatment;

@@ -43,7 +43,7 @@ function ListHistory() {
     }
     if (patient_id) {
       setUrlGetRecords(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/list?patient_id=${patient_id}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/list?patient_id=${patient_id}&status=active`
       );
 
       fetchData(patient_id);

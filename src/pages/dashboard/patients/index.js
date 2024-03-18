@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 
 function ListPatients() {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const urlGetRecords = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/list`;
+  const urlGetRecords = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/list?status=active`;
   const urlNewRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/new`;
   const urlUpdateRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/update`;
   const urlDeleteRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/delete?id={record_id}`;
@@ -193,16 +193,6 @@ function ListPatients() {
                 label: 'Teléfono del Dueño',
                 type: 'text',
                 isRequired: true,
-              },
-              {
-                key: 'status',
-                label: 'Status',
-                type: 'select',
-                isRequired: true,
-                items: [
-                  { value: 'active', label: 'Active' },
-                  { value: 'inactive', label: 'Inactive' },
-                ],
               },
             ],
           }}

@@ -53,7 +53,7 @@ async function createRecord(record) {
       horse_farm: record.horse_farm,
       owner_name: record.owner_name,
       owner_phone: record.owner_phone,
-      status: record.status,
+      status: 'active',
     });
 
     const response = await axios({
@@ -98,9 +98,6 @@ export default async function handler(req, res) {
     }
     if (!record_request.owner_phone || record_request.owner_phone === '') {
       validation.owner_phone = 'Field Required';
-    }
-    if (!record_request.status || record_request.status === '') {
-      validation.status = 'Field Required';
     }
 
     //EVALUATE IF VALIDATION IS NOT EMPTY

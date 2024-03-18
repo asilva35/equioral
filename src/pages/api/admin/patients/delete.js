@@ -5,17 +5,18 @@ import { sanitizeOBJ } from '@/utils/utils';
 async function deleteRecord(id) {
   const url = `${process.env.VIDASHY_URL}${process.env.VIDASHY_ORGANIZATION}/${process.env.VIDASHY_DATABASE}/patients`;
   try {
-    const delete_recod = sanitizeOBJ({
+    const delete_record = sanitizeOBJ({
       id,
+      status: 'inactive',
     });
 
     const response = await axios({
-      method: 'delete',
+      method: 'patch',
       url,
       headers: {
         Authorization: `Bearer ${process.env.VIDASHY_API_KEY}`,
       },
-      data: delete_recod,
+      data: delete_record,
     });
     return response.data || null;
   } catch (error) {

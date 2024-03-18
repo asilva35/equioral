@@ -1,18 +1,25 @@
 import { getRecords } from '@/vidashy-sdk/dist/backend';
 import { getToken } from 'next-auth/jwt';
 
-async function listRecords(patient_id, page = 1, pageSize = 5, search = '') {
+async function listRecords(
+  patient_id,
+  page = 1,
+  pageSize = 5,
+  status = 'active',
+  search = ''
+) {
   const params = {
     page,
     pageSize,
     filter: {
       patient_id,
+      status,
     },
   };
   if (search) {
     params.filter = {
       and: [
-        { or: [{ patient_id }] },
+        { and: [{ patient_id }, { status }] },
         {
           or: [
             {
@@ -42,14 +49,14 @@ export default async function handler(req, res) {
     if (!token)
       return res.status(401).send({ data: {}, message: 'Not authorized' });
 
-    const { page, pageSize, patient_id, search } = req.query;
+    const { page, pageSize, patient_id, status, search } = req.query;
     const { role } = token;
 
     if (role !== 'admin') {
       return res.status(401).send({ data: {}, message: 'Not authorized' });
     }
 
-    let records = await listRecords(patient_id, page, pageSize, search);
+    let records = await listRecords(patient_id, page, pageSize, status, search);
 
     if (!records || !records.records || records.records.length === 0)
       return res

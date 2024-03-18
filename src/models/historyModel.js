@@ -11,6 +11,7 @@ const historyModel = {
     share_enabled: '',
     share_url: '',
   },
+  status: '',
 };
 
 export default historyModel;
