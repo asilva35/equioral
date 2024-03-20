@@ -711,22 +711,8 @@ function HistoryDetail() {
                             width: '150px',
                             height: 'auto',
                             minHeight: '50px',
-                            border: '2px solid #000',
                           }}
                         />
-                        {/* <Image
-                          src={photo.src}
-                          width={150}
-                          height={150}
-                          alt=""
-                          className={`${styles.PdfPhoto}`}
-                          style={{
-                            width: '150px',
-                            height: 'auto',
-                            minHeight: '50px',
-                            border: '2px solid #f00',
-                          }}
-                        /> */}
                       </div>
                     );
                   })}
