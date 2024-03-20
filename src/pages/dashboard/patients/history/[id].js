@@ -244,7 +244,7 @@ function ListHistory() {
                 </div>
                 <div className="flex flex-row gap-1 items-start justify-start">
                   <h4 className="text-small font-semibold leading-none text-default-600">
-                    Teléfono:
+                    Caballo:
                   </h4>
                   <h5 className="text-small tracking-tight text-default-600">
                     {patient ? (
