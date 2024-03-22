@@ -120,7 +120,6 @@ export default function MainScreenObject(props) {
             })
           );
           setTotalPages(recordsBD.data.totalPages);
-          setPage(recordsBD.data.page);
         } else {
           setListRecords([]);
           setTotalPages(1);
