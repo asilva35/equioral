@@ -83,9 +83,11 @@ export default function MainScreenObject(props) {
     setRecordChange(value);
   };
 
-  const onFieldChange = (key, value) => {
+  const onFieldChange = (key, value, onChange = null) => {
     const newRecord = { ...recordModal };
     newRecord[key] = value;
+    if (onChange) onChange(key, value, newRecord);
+
     setRecordModal(newRecord);
     setRecordChange(true);
   };
@@ -314,8 +316,8 @@ export default function MainScreenObject(props) {
             onRecordChange(value);
           }}
           record={recordModal}
-          onFieldChange={(key, value) => {
-            onFieldChange(key, value);
+          onFieldChange={(key, value, onChange) => {
+            onFieldChange(key, value, onChange);
           }}
           onChangeImage={(image, multiple) => {
             showChangeImage(image, multiple);

@@ -403,7 +403,10 @@ function HistoryDetail() {
                     variant="shadow"
                     className={`${styles.MainButton}`}
                     onClick={() => {
-                      setShowModalPdf((currCount) => currCount + 1);
+                      //setShowModalPdf((currCount) => currCount + 1);
+                      const params = JSON.stringify({ patient, history });
+                      const url = `${process.env.NEXT_PUBLIC_PDFGEN}?params=${params}`;
+                      window.open(url);
                     }}
                     startContent={
                       <Image
@@ -573,7 +576,8 @@ function HistoryDetail() {
                   {history &&
                     Array.isArray(history.photos) &&
                     history.photos.map((photo, index) => (
-                      <Image
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
                         key={index}
                         src={photo.src}
                         width={100}
@@ -689,20 +693,20 @@ function HistoryDetail() {
                 {history &&
                   Array.isArray(history.photos) &&
                   history.photos.map((photo, index) => {
-                    fetch(photo.src)
-                      .then((response) => response.blob())
-                      .then((blob) => {
-                        let reader = new FileReader();
-                        reader.onloadend = function () {
-                          photo.base64 = reader.result;
-                        };
-                        reader.readAsDataURL(blob);
-                      });
+                    // fetch(photo.src)
+                    //   .then((response) => response.blob())
+                    //   .then((blob) => {
+                    //     let reader = new FileReader();
+                    //     reader.onloadend = function () {
+                    //       photo.base64 = reader.result;
+                    //     };
+                    //     reader.readAsDataURL(blob);
+                    //   });
                     return (
                       <div key={index}>
                         <img
                           key={index}
-                          src={photo.base64}
+                          src={photo.src}
                           width={150}
                           height={150}
                           alt=""
@@ -898,7 +902,8 @@ function HistoryDetail() {
             </Button>
           </div>
           {previewImage && previewImage[1] ? (
-            <Image
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               src={previewImage ? previewImage[1] : ''}
               width={200}
               height={200}

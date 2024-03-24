@@ -136,7 +136,8 @@ function ListHistory() {
             {Array.isArray(cellValue) &&
               cellValue.map((photo, index) =>
                 index > 2 ? null : (
-                  <Image
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
                     key={index}
                     src={photo.src}
                     width={40}

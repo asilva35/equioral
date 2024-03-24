@@ -278,7 +278,7 @@ export default function DetailRecord(props) {
                   isInvalid={validation[field.key] ? true : false}
                   errorMessage={validation[field.key]}
                   onSelectionChange={(value) => {
-                    onFieldChange(field.key, value);
+                    onFieldChange(field.key, value, field.onChange);
                   }}
                   defaultSelectedKey={record && record[field.key]}
                 >
