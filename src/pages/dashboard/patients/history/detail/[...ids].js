@@ -24,7 +24,6 @@ import {
 import ModalComponent from '@/components/dashboard/ModalComponent';
 import MediaUpload from '@/components/dashboard/MediaUpload';
 
-import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 import { toast } from 'react-toastify';
 
 import Resizer from 'react-image-file-resizer';
@@ -62,7 +61,6 @@ function HistoryDetail() {
   const urlUpdateRecord = `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/patients/history/update`;
 
   const [showModalChangeImage, setShowModalChangeImage] = React.useState(0);
-  const [showModalPdf, setShowModalPdf] = React.useState(0);
   const [showModalShare, setShowModalShare] = React.useState(0);
   const [allowUploadImage, setAllowUploadImage] = React.useState(false);
   const [savingImage, setSavingImage] = React.useState(false);
@@ -403,7 +401,6 @@ function HistoryDetail() {
                     variant="shadow"
                     className={`${styles.MainButton}`}
                     onClick={() => {
-                      //setShowModalPdf((currCount) => currCount + 1);
                       const params = JSON.stringify({ patient, history });
                       const url = `${process.env.NEXT_PUBLIC_PDFGEN}?params=${params}`;
                       window.open(url);
@@ -614,116 +611,7 @@ function HistoryDetail() {
             }}
           />
         </ModalComponent>
-        <ModalComponent
-          size="5xl"
-          show={showModalPdf}
-          onSave={() => {
-            const filename = 'historia.pdf';
-            generatePDF(targetPdfRef, { filename });
-          }}
-          labelButtonSave="Descargar"
-          title="Descargar Pdf"
-          onCloseModal={() => {}}
-          allowSave={() => {}}
-          savingRecord={false}
-        >
-          <div ref={targetPdfRef} className={`${styles.PdfTarget}`}>
-            <div className={`${styles.PdfHeader}`}>
-              <div className={`${styles.PdfLeftHeader}`}>
-                <div className={`${styles.PdfHeaderInfo}`}>
-                  <div className={`${styles.PdfRowInfo}`}>
-                    <div className={`${styles.PdfInfo}`}>
-                      <h1>Id Historia: </h1>
-                      <p>{history ? history.id : ''}</p>
-                    </div>
-                  </div>
-                  <div className={`${styles.PdfRowInfo}`}>
-                    <div className={`${styles.PdfInfo}`}>
-                      <h1>Criadero: </h1>
-                      <p>{patient ? patient.horse_farm : ''}</p>
-                    </div>
-                    <div className={`${styles.PdfInfo}`}>
-                      <h1>Dueño: </h1>
-                      <p>{patient ? patient.owner_name : ''}</p>
-                    </div>
-                  </div>
-                  <div className={`${styles.PdfRowInfo}`}>
-                    <div className={`${styles.PdfInfo}`}>
-                      <h1>Caballo: </h1>
-                      <p>{patient ? patient.horse : ''}</p>
-                    </div>
-                    <div className={`${styles.PdfInfo}`}>
-                      <h1>Teléfono: </h1>
-                      <p>{patient ? patient.owner_phone : ''}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div className={`${styles.PdfRightHeader}`}>
-                <div className={`${styles.PdfLogo}`}>
-                  <img
-                    src="/assets/images/theme-light/logo.png"
-                    width={176}
-                    height={89}
-                    alt="Logo"
-                    style={{ width: '176px', height: '89px' }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className={`${styles.PdfBody}`}>
-              <div className={`${styles.PdfFieldGroup}`}>
-                <div className={`${styles.PdfFieldGroupTitle}`}>
-                  Observación Inicial
-                </div>
-                <div className={`${styles.PdfFieldGroupText}`}>
-                  {history ? history.first_observation : ''}
-                </div>
-              </div>
-              <div className={`${styles.PdfFieldGroup}`}>
-                <div className={`${styles.PdfFieldGroupTitle}`}>
-                  Tratamiento
-                </div>
-                <div className={`${styles.PdfFieldGroupText}`}>
-                  {history ? history.treatment : ''}
-                </div>
-              </div>
-              <div className={`${styles.PdfPhotos}`}>
-                {history &&
-                  Array.isArray(history.photos) &&
-                  history.photos.map((photo, index) => {
-                    // fetch(photo.src)
-                    //   .then((response) => response.blob())
-                    //   .then((blob) => {
-                    //     let reader = new FileReader();
-                    //     reader.onloadend = function () {
-                    //       photo.base64 = reader.result;
-                    //     };
-                    //     reader.readAsDataURL(blob);
-                    //   });
-                    return (
-                      <div key={index}>
-                        <img
-                          key={index}
-                          src={photo.src}
-                          width={150}
-                          height={150}
-                          alt=""
-                          className={`${styles.PdfPhoto}`}
-                          style={{
-                            width: '150px',
-                            height: 'auto',
-                            minHeight: '50px',
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
-        </ModalComponent>
         <ModalComponent
           show={showModalShare}
           onSave={async () => {

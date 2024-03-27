@@ -135,7 +135,7 @@ function ListHistory() {
           >
             {Array.isArray(cellValue) &&
               cellValue.map((photo, index) =>
-                index > 2 ? null : (
+                index > 1 ? null : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={index}
@@ -296,7 +296,7 @@ function ListHistory() {
           urlNewRecord={urlNewRecord}
           urlUpdateRecord={urlUpdateRecord}
           urlDeleteRecord={urlDeleteRecord}
-          tablePageSize={5}
+          tablePageSize={30}
           model={historyModel}
           tableComponentData={{
             title: 'Historia Clínica',

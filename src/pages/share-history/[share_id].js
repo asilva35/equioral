@@ -4,7 +4,6 @@ import styles from '@/styles/HistoryDetailShare.module.css';
 import { useRouter } from 'next/router';
 import { Skeleton, Button, Input } from '@nextui-org/react';
 import Metaheader from '@/components/Metaheader';
-import generatePDF from 'react-to-pdf';
 import ModalComponent from '@/components/dashboard/ModalComponent';
 
 async function getPatient(patient_id) {
@@ -76,7 +75,7 @@ export default function ShareHistory() {
       const now = new Date().getTime();
 
       if (now - share_time > expiration) {
-        //console.log('Expired');
+        console.log('Expired');
         return;
       }
     }
@@ -99,8 +98,9 @@ export default function ShareHistory() {
               variant="shadow"
               className={`${styles.MainButton}`}
               onClick={() => {
-                const filename = 'history.pdf';
-                generatePDF(targetPdfRef, { filename });
+                const params = JSON.stringify({ patient, history });
+                const url = `${process.env.NEXT_PUBLIC_PDFGEN}?params=${params}`;
+                window.open(url);
               }}
               startContent={
                 <Image

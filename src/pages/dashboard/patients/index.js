@@ -141,7 +141,7 @@ function ListPatients() {
           urlNewRecord={urlNewRecord}
           urlUpdateRecord={urlUpdateRecord}
           urlDeleteRecord={urlDeleteRecord}
-          tablePageSize={5}
+          tablePageSize={30}
           model={patientModel}
           tableComponentData={{
             title: 'Lista de pacientes',
